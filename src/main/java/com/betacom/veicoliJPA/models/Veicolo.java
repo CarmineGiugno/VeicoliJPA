@@ -48,7 +48,7 @@ public class Veicolo {
 	private Integer ruote;
 
 	// targa sul padre: colonna unica condivisa (auto/moto la valorizzano, bici la lascia NULL)
-	@Column(length = 10)
+	@Column(length = 10, unique = true)
 	private String targa;
 
 	// enum salvato come testo ("DIESEL"), non come indice numerico
