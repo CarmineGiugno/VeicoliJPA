@@ -27,10 +27,10 @@ public abstract class VeicoloReq {
 		@NotBlank(groups = Create.class, message = "Il modello è obbligatorio")
 		private String modello;
 
-		@Min(value = 1888, message = "Anno non valido")
+		@Min(value = 1888, groups = Create.class, message = "veicolo.anno.nonvalido")
 		private Integer anno;
 
-		@Positive(message = "Le ruote devono essere un numero positivo")
+		@Positive(groups = Create.class, message = "Le ruote devono essere un numero positivo")
 		private Integer ruote;
 		
 		@NotNull(groups = Create.class, message = "L'alimentazione è obbligatoria")

@@ -3,6 +3,7 @@ package com.betacom.veicoliJPA.services.implementations;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.betacom.veicoliJPA.dto.input.BiciReq;
 import com.betacom.veicoliJPA.dto.input.MacchinaReq;
@@ -24,6 +25,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service
 public class VeicoloImpl implements IVeicoloServices{
 
 	@Autowired
@@ -73,7 +75,7 @@ public class VeicoloImpl implements IVeicoloServices{
 	@Transactional
 	public void delete(Integer id) throws VeicoloException {
 		Veicolo v = veicoloR.findById(id)
-				.orElseThrow(() -> new VeicoloException("Veicolo non trovato: " + id));
+				.orElseThrow(() -> new VeicoloException("veicolo.non.trovato"));
 		veicoloR.delete(v);
 		log.debug("Eliminato veicolo id {}", id);
 	}
@@ -81,7 +83,7 @@ public class VeicoloImpl implements IVeicoloServices{
 	@Override
 	public VeicoloDTO getById(Integer id) throws VeicoloException {
 		Veicolo v = veicoloR.findById(id)
-				.orElseThrow(() -> new VeicoloException("Veicolo non trovato: " + id));
+				.orElseThrow(() -> new VeicoloException("veicolo.non.trovato"));
 		return VeicoloMap.mapToDTO(v);
 	}
 	
@@ -98,12 +100,12 @@ public class VeicoloImpl implements IVeicoloServices{
 		String targa = (req instanceof MacchinaReq mr) ? mr.getTarga()
 				: (req instanceof MotoReq mor) ? mor.getTarga() : null;
 		if (targa != null && veicoloR.existsByTarga(targa)) {
-			throw new VeicoloException("Targa già presente: " + targa);
+			throw new VeicoloException("veicolo.targa.duplicata");
 		}
 
 		// risolve l'id categoria in entità gestita
 		Categoria categoria = categoriaR.findById(req.getCategoriaId())
-				.orElseThrow(() -> new VeicoloException("Categoria non trovata: " + req.getCategoriaId()));
+				.orElseThrow(() -> new VeicoloException("categoria.non.trovata"));
 
 		v.setMarca(req.getMarca());
 		v.setModello(req.getModello());

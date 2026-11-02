@@ -18,6 +18,6 @@ public class MacchinaReq extends VeicoloReq{
 	private Integer porte;
 	
 	@NotBlank(groups = Create.class, message = "La targa è obbligatoria")
-	@Pattern(regexp = "^[A-Z]{2}[0-9]{3}[A-Z]{2}$", message = "Targa auto non valida (atteso AA000AA)")
+	@Pattern(regexp = "^[A-Z]{2}[0-9]{3}[A-Z]{2}$", message = "veicolo.targa.auto.formato")
 	private String targa;
 }

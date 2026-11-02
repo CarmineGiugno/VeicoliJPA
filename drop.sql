@@ -6,4 +6,6 @@
 
     drop table if exists categoria cascade;
 
+    drop table if exists messaggi_sistema cascade;
+
     drop table if exists veicolo cascade;

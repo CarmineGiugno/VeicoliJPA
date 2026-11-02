@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.betacom.veicoliJPA.models.Alimentazione;
+import com.betacom.veicoliJPA.models.Categoria;
 import com.betacom.veicoliJPA.models.Veicolo;
 
 @Repository
@@ -18,4 +19,6 @@ public interface IVeicoloRepository extends JpaRepository<Veicolo, Integer> {
 	List<Veicolo> findByAlimentazione(Alimentazione alimentazione);
 
 	List<Veicolo> findByCategoriaDescrizioneIgnoreCase(String descrizione);
+	
+	Boolean existsByCategoria(Categoria categoria);
 }

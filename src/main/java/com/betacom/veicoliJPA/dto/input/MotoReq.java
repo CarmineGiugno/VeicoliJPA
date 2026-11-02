@@ -16,6 +16,6 @@ public class MotoReq extends VeicoloReq{
 	private String tipoForcella;
 
 	@NotBlank(groups = Create.class, message = "La targa è obbligatoria")
-	@Pattern(regexp = "^[A-Z]{2}[0-9]{5}$", message = "Targa moto non valida (atteso AA00000)")
+	@Pattern(regexp = "^[A-Z]{2}[0-9]{5}$", message = "veicolo.targa.moto.formato")
 	private String targa;
 }

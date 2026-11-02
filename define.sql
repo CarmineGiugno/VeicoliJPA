@@ -5,6 +5,13 @@
         primary key (id)
     );
 
+    create table messaggi_sistema (
+        lang varchar(4) not null,
+        code varchar(30) not null,
+        messaggio varchar(255),
+        primary key (lang, code)
+    );
+
     create table veicolo (
         anno integer,
         categoria_id integer,
@@ -13,7 +20,7 @@
         pieghevole boolean,
         porte integer,
         ruote integer,
-        targa varchar(10),
+        targa varchar(10) unique,
         alimentazione varchar(20) check ((alimentazione in ('BENZINA','DIESEL','ELETTRICA','IBRIDA','GPL','METANO','MUSCOLARE'))),
         tipo_forcella varchar(30),
         tipo_veicolo varchar(31) not null check ((tipo_veicolo in ('Veicolo','bici','macchina','moto'))),
