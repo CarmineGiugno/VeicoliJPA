@@ -39,6 +39,7 @@ public class VeicoloImpl implements IVeicoloServices{
 	public VeicoloDTO createMacchina(MacchinaReq req) throws VeicoloException {
 		Macchina m = new Macchina();
 		applyCommonFields(m, req);
+		m.setRuote(4);
 		m.setTarga(req.getTarga());
 		m.setPorte(req.getPorte());
 		veicoloR.save(m);
@@ -51,6 +52,7 @@ public class VeicoloImpl implements IVeicoloServices{
 	public VeicoloDTO createMoto(MotoReq req) throws VeicoloException {
 		Moto mo = new Moto();
 		applyCommonFields(mo, req);
+		mo.setRuote(2);
 		mo.setTarga(req.getTarga());
 		mo.setTipoForcella(req.getTipoForcella());
 		veicoloR.save(mo);
@@ -63,6 +65,7 @@ public class VeicoloImpl implements IVeicoloServices{
 	public VeicoloDTO createBici(BiciReq req) throws VeicoloException {
 		Bici bi = new Bici();
 		applyCommonFields(bi, req);
+		bi.setRuote(2);
 		bi.setMarce(req.getMarce());
 		bi.setFreno(req.getFreno());
 		bi.setPieghevole(req.getPieghevole());
@@ -110,7 +113,6 @@ public class VeicoloImpl implements IVeicoloServices{
 		v.setMarca(req.getMarca());
 		v.setModello(req.getModello());
 		v.setAnno(req.getAnno());
-		v.setRuote(req.getRuote());
 		v.setAlimentazione(req.getAlimentazione());
 		v.setCategoria(categoria);
 	}

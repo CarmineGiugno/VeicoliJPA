@@ -20,6 +20,8 @@ import com.betacom.veicoliJPA.dto.output.VeicoloDTO;
 import com.betacom.veicoliJPA.exceptions.VeicoloException;
 import com.betacom.veicoliJPA.services.interfaces.IVeicoloServices;
 
+import jakarta.validation.groups.Default;
+
 @RestController
 @RequestMapping("/veicoli")
 public class VeicoloController {
@@ -28,17 +30,17 @@ public class VeicoloController {
 	private IVeicoloServices veicoloS;
 	
 	@PostMapping("/macchina")
-	public VeicoloDTO createMacchina(@RequestBody @Validated(Create.class) MacchinaReq req) throws VeicoloException {
+	public VeicoloDTO createMacchina(@RequestBody @Validated({Create.class, Default.class}) MacchinaReq req) throws VeicoloException {
 		return veicoloS.createMacchina(req);
 	}
 	
 	@PostMapping("/moto")
-	public VeicoloDTO createMoto(@RequestBody @Validated(Create.class) MotoReq req) throws VeicoloException {
+	public VeicoloDTO createMoto(@RequestBody @Validated({Create.class, Default.class}) MotoReq req) throws VeicoloException {
 		return veicoloS.createMoto(req);
 	}
 	
 	@PostMapping("/bici")
-	public VeicoloDTO createBici(@RequestBody @Validated(Create.class) BiciReq req) throws VeicoloException {
+	public VeicoloDTO createBici(@RequestBody @Validated({Create.class, Default.class}) BiciReq req) throws VeicoloException {
 		return veicoloS.createBici(req);
 	}
 

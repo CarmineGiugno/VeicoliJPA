@@ -1,6 +1,7 @@
 package com.betacom.veicoliJPA.dto.input;
 
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,7 +10,9 @@ import lombok.ToString;
 @Setter
 @ToString(callSuper = true)
 public class BiciReq extends VeicoloReq{
-	@Positive(message = "Il numero di marce deve essere positivo")
+	
+	@Min(value = 1, message = "bici.marce.nonvalide")
+	@Max(value = 30, message = "bici.marce.nonvalide")
 	private Integer marce;
 
 	private String freno;
