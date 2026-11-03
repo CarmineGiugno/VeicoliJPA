@@ -9,6 +9,7 @@ import com.betacom.veicoliJPA.dto.input.BiciReq;
 import com.betacom.veicoliJPA.dto.input.MacchinaReq;
 import com.betacom.veicoliJPA.dto.input.MotoReq;
 import com.betacom.veicoliJPA.dto.input.VeicoloReq;
+import com.betacom.veicoliJPA.dto.input.VeicoloSearchReq;
 import com.betacom.veicoliJPA.dto.output.VeicoloDTO;
 import com.betacom.veicoliJPA.exceptions.VeicoloException;
 import com.betacom.veicoliJPA.mapper.VeicoloMap;
@@ -49,6 +50,27 @@ public class VeicoloImpl implements IVeicoloServices{
 	
 	@Override
 	@Transactional
+	public VeicoloDTO updateMacchina(MacchinaReq req) throws VeicoloException {
+		Veicolo v = veicoloR.findById(req.getId())
+				.orElseThrow(() -> new VeicoloException("veicolo.non.trovato"));
+		if (!(v instanceof Macchina m)) {
+			throw new VeicoloException("veicolo.tipo.errato");
+		}
+		applyCommonUpdate(m, req);
+		if (req.getPorte() != null) m.setPorte(req.getPorte());
+		if (req.getTarga() != null) {
+			// targa cambiata: controlla che non sia di un altro veicolo
+			if (!req.getTarga().equals(m.getTarga()) && veicoloR.existsByTarga(req.getTarga())) {
+				throw new VeicoloException("veicolo.targa.duplicata");
+			}
+			m.setTarga(req.getTarga());
+		}
+		veicoloR.save(m);
+		return VeicoloMap.mapToDTO(m);
+	}
+	
+	@Override
+	@Transactional
 	public VeicoloDTO createMoto(MotoReq req) throws VeicoloException {
 		Moto mo = new Moto();
 		applyCommonFields(mo, req);
@@ -57,6 +79,28 @@ public class VeicoloImpl implements IVeicoloServices{
 		mo.setTipoForcella(req.getTipoForcella());
 		veicoloR.save(mo);
 		log.debug("Creata moto id {}", mo.getId());
+		return VeicoloMap.mapToDTO(mo);
+	}
+	
+	@Override
+	@Transactional
+	public VeicoloDTO updateMoto(MotoReq req) throws VeicoloException {
+		Veicolo v = veicoloR.findById(req.getId())
+				.orElseThrow(() -> new VeicoloException("veicolo.non.trovato"));
+		if (!(v instanceof Moto mo)) {
+			throw new VeicoloException("veicolo.tipo.errato");
+		}
+		applyCommonUpdate(mo, req);
+		if (req.getTipoForcella() != null) {
+			mo.setTipoForcella(req.getTipoForcella());
+		}
+		if (req.getTarga() != null) {
+			if (!req.getTarga().equals(mo.getTarga()) && veicoloR.existsByTarga(req.getTarga())) {
+				throw new VeicoloException("veicolo.targa.duplicata");
+			}
+			mo.setTarga(req.getTarga());
+		}
+		veicoloR.save(mo);
 		return VeicoloMap.mapToDTO(mo);
 	}
 	
@@ -71,6 +115,22 @@ public class VeicoloImpl implements IVeicoloServices{
 		bi.setPieghevole(req.getPieghevole());
 		veicoloR.save(bi);
 		log.debug("Creata bici id {}", bi.getId());
+		return VeicoloMap.mapToDTO(bi);
+	}
+	
+	@Override
+	@Transactional
+	public VeicoloDTO updateBici(BiciReq req) throws VeicoloException {
+		Veicolo v = veicoloR.findById(req.getId())
+				.orElseThrow(() -> new VeicoloException("veicolo.non.trovato"));
+		if (!(v instanceof Bici bi)) {
+			throw new VeicoloException("veicolo.tipo.errato");
+		}
+		applyCommonUpdate(bi, req);
+		if (req.getMarce() != null)      bi.setMarce(req.getMarce());
+		if (req.getFreno() != null)      bi.setFreno(req.getFreno());
+		if (req.getPieghevole() != null) bi.setPieghevole(req.getPieghevole());
+		veicoloR.save(bi);
 		return VeicoloMap.mapToDTO(bi);
 	}
 	
@@ -115,6 +175,36 @@ public class VeicoloImpl implements IVeicoloServices{
 		v.setAnno(req.getAnno());
 		v.setAlimentazione(req.getAlimentazione());
 		v.setCategoria(categoria);
+	}
+	
+	// nel VeicoloImpl, metodo privato per l'update dei campi comuni
+	private void applyCommonUpdate(Veicolo v, VeicoloReq req) throws VeicoloException {
+		if (req.getMarca() != null)    v.setMarca(req.getMarca());
+		if (req.getModello() != null)  v.setModello(req.getModello());
+		if (req.getAnno() != null)     v.setAnno(req.getAnno());
+		if (req.getAlimentazione() != null) v.setAlimentazione(req.getAlimentazione());
+
+		if (req.getCategoriaId() != null) {
+			Categoria c = categoriaR.findById(req.getCategoriaId())
+					.orElseThrow(() -> new VeicoloException("categoria.non.trovata"));
+			v.setCategoria(c);
+		}
+	}
+	
+	@Override
+	public List<VeicoloDTO> search(VeicoloSearchReq req) {
+		return veicoloR.filter(
+				req.getMarca(),
+				req.getAlimentazione(),
+				req.getCategoria(),
+				req.getAnnoMin(),
+				req.getAnnoMax(),
+				req.getTipoVeicolo(),
+				req.getTarga(),
+				req.getPorte(),
+				req.getMarce(),
+				req.getTipoForcella()
+		).stream().map(VeicoloMap::mapToDTO).toList();
 	}
 	
 	

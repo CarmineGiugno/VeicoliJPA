@@ -36,6 +36,9 @@ public class Veicolo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@Column(name = "tipo_veicolo", insertable = false, updatable = false)
+	private String tipoVeicolo;
 
 	@Column(length = 50, nullable = false)
 	private String marca;

@@ -27,4 +27,5 @@ public class VeicoloDTO extends ResponseDTO{
 	private Integer marce;
 	private String freno;
 	private Boolean pieghevole;
+	private String tipoVeicolo;
 }
